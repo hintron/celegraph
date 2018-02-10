@@ -1,0 +1,64 @@
+# Ignore executables
+bin
+
+# Ignore local libraries and headers
+include
+lib
+# *_temp/
+
+# Ignore 3rd-party library folders
+msgpack
+catch
+sqlitecpp
+
+
+# Generic Log Files
+*.log
+
+# Backup Files
+*~
+*.bac
+
+# Compiled Object files
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.so
+*.dll
+
+# Compiled Static libraries
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+
+# Binary Files
+bin/*
+
+# Builds
+# build/*
+
+# Database
+*.db
+
+# Vim Artifacts
+*.swp
+*.swo
+
+# Sublime Text 3 text editor files
+*.sublime-project
+*.sublime-workspace
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store*
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+[Tt]humbs.db
+[Dd]esktop.ini

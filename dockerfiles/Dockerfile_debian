@@ -1,0 +1,29 @@
+# Oldentide Dedicated Server Container
+# debian - jessie slim
+
+FROM debian:jessie-slim
+
+# Set the working directory
+WORKDIR /oldentide
+
+# Copy the current directory contents into the container at the working directory
+ADD . /oldentide
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    git \
+    libsqlite3-dev \
+    sqlite3 \
+    sudo \
+    vim \
+ # remove leftover package cache
+ && rm -rf /var/lib/apt/lists/*
+
+RUN ["make"]
+
+# Make ports available to the world outside this container
+EXPOSE 1337/udp
+
+# Spawn a command line interface
+CMD ["bash"]

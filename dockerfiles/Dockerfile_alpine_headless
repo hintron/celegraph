@@ -1,0 +1,33 @@
+# Oldentide Dedicated Server Container
+# alpine - headless
+
+
+# Base image
+FROM alpine:3.6
+
+# Set the working directory
+WORKDIR /oldentide
+
+# Copy the current directory contents into the container at the working directory
+ADD . /oldentide
+
+# --no-cache is like --update, but deletes package list cache automatically
+# To search for valid packages, go to https://pkgs.alpinelinux.org/packages
+RUN apk --no-cache add \
+    make\
+    g++ \
+    cmake \
+    git \
+    sqlite \
+    sqlite-dev \
+    sudo
+
+RUN ["make"]
+
+# Make ports available to the world outside this container
+# UDP ports need to be explicitly specified
+EXPOSE 1337/udp
+
+# TODO: This isn't working, it seems...
+# Spawn a command line interface
+CMD ["/oldentied/bin/Server", "1337"]
