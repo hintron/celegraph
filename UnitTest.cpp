@@ -1,7 +1,4 @@
-// Filename:    UnitTest.cpp
-// Author:      Joseph DeVictoria
-// Date:        September_24_2016
-// Purpose:     A non-exhaustive unit testing platform to quickly enable functions.
+// A unit testing platform to verify functions.
 
 // Load the testing framework (do it ABOVE the catch include!)
 #define CATCH_CONFIG_MAIN   // This tells Catch to provide a main() - only do this in one cpp file
@@ -9,10 +6,7 @@
 #include <catch.hpp>
 #include "AdminShell.h"
 #include "GameState.h"
-#include "Item.h"
-#include "Character.h"
-#include "Player.h"
-#include "Npc.h"
+#include "User.h"
 #include "Packets.h"
 #include "Server.h"
 #include "SQLConnector.h"
@@ -28,25 +22,13 @@ TEST_CASE( "create server", "[server]" ) {
 /////////////////////////////////////////////////////
 //       Create and test a 'init db' or blank_db
 //       get accounts
-//       get characters
-//       get players
-//       get npcs
-// TODO: get item
+//       get users
 //       insert account
-//       insert character
-//       insert player
-//       insert npc
-// TODO: insert item
+//       insert user
 // TODO: delete account - test cascade deletes
-// TODO: delete character - test cascade deletes
-// TODO: delete player
-// TODO: delete npc
-// TODO: delete item
+// TODO: delete user
 // TODO: update account - test cascade updates
-// TODO: update player
-// TODO: update npc
-// TODO: update character - test cascade updates
-// TODO: update item
+// TODO: update user
 /////////////////////////////////////////////////////
 
 
@@ -71,7 +53,7 @@ std::vector<std::string> accounts_to_insert {
 TEST_CASE( "init db", "[sql]" ) {
     SQLConnector* sql = new SQLConnector();
     // Init the db
-    REQUIRE( sql->ExecuteSqlFile("db/InitializeDb.sql") == true );
+    REQUIRE( sql->ExecuteSqlFile("db/init_db.sql") == true );
 
     delete sql;
 }
@@ -101,104 +83,26 @@ TEST_CASE( "insert account", "[sql]" ) {
 }
 
 
-TEST_CASE( "insert player", "[sql]" ) {
+TEST_CASE( "insert user", "[sql]" ) {
     SQLConnector* sql = new SQLConnector();
     sockaddr_in dummyClient;
-    equipment_t dummyEquipment = {};
-    stats_t dummyStats = {};
-    skills_t dummySkills = {};
-    location_t dummyLocation = {};
 
-    Player tony(
+    User tony(
         dummyClient,
         accounts_to_insert[0],
         17,
         1,
-        dummySkills,
         "Tony",
-        "Starks",
-        "Marvel",
-        "Human",
-        "Male",
-        "Mustached",
-        "White",
-        "zone1",
-        "Electrical Engineer",
-        dummyEquipment,
-        dummyStats,
-        dummyLocation
+        "Starks"
     );
 
     int account_id = 1;
-    REQUIRE( sql->InsertPlayer(tony, account_id) != 0 );
-    // Test to make sure players looks good
-    std::vector<std::string> players = sql->GetPlayerList(accounts_to_insert[0]);
-    REQUIRE( players.size() > 0 );
+    REQUIRE( sql->InsertUser(tony, account_id) != 0 );
+    // Test to make sure users looks good
+    std::vector<std::string> users = sql->GetUserList(accounts_to_insert[0]);
+    REQUIRE( users.size() > 0 );
     delete sql;
 }
-
-
-
-TEST_CASE( "insert npcs", "[sql]" ) {
-    SQLConnector* sql = new SQLConnector();
-    equipment_t dummyEquipment = {};
-    location_t dummyLocation = {};
-    stats_t dummyStats = {};
-
-    Npc griphook(
-        0,
-        "Griphook",
-        "",
-        "Gringotts",
-        "Goblin",
-        "Male",
-        "Normal",
-        "Pale",
-        "zone1",
-        "Banker",
-        dummyEquipment,
-        dummyStats,
-        dummyLocation
-    );
-
-    int npc_id = sql->InsertNpc(griphook);
-    REQUIRE( npc_id != 0 );
-
-    // Check to see if id getter and setter works
-    griphook.SetId(npc_id);
-    REQUIRE( griphook.GetId() == npc_id );
-
-    std::vector<Npc> npcs = sql->GetNpcs();
-    REQUIRE( npcs.size() > 0 );
-    REQUIRE( npcs.at(0).GetFirstname() == "Griphook" );
-
-    delete sql;
-}
-
-
-
-
-TEST_CASE( "insert items", "[sql]" ) {
-    SQLConnector* sql = new SQLConnector();
-    // Character dummyCharacter;
-
-    Item sting(
-        1,
-        "Sting",
-        "dummy_location",
-        "dummy_weight",
-        true,
-        false,
-        17,
-        17
-    );
-
-    int item_id = sql->InsertItem(sting);
-    REQUIRE( item_id != 0 );
-
-    delete sql;
-}
-
 
 
 

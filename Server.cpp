@@ -1,8 +1,3 @@
-// Filename:    Server.cpp
-// Author:      Joseph DeVictoria
-// Date:        Jan_31_2016
-// Purpose:     Dedicated server class.
-
 #include "Server.h"
 #include "AdminShell.h"
 #include "GameState.h"
@@ -131,17 +126,17 @@ void Server::WorkerThread(int id) {
             case packets::DISCONNECT:
                 DisconnectHandler(&deserialized_data, &(packet.source));
                 break;
-            case packets::LISTCHARACTERS:
-                ListCharactersHandler(&deserialized_data, &(packet.source));
+            case packets::LISTUSERS:
+                ListUsersHandler(&deserialized_data, &(packet.source));
                 break;
-            case packets::SELECTCHARACTER:
-                SelectCharacterHandler(&deserialized_data, &(packet.source));
+            case packets::SELECTUSER:
+                SelectUserHandler(&deserialized_data, &(packet.source));
                 break;
-            case packets::DELETECHARACTER:
-                DeleteCharacterHandler(&deserialized_data, &(packet.source));
+            case packets::DELETEUSER:
+                DeleteUserHandler(&deserialized_data, &(packet.source));
                 break;
-            case packets::CREATECHARACTER:
-                CreateCharacterHandler(&deserialized_data, &(packet.source));
+            case packets::CREATEUSER:
+                CreateUserHandler(&deserialized_data, &(packet.source));
                 break;
             case packets::INITIALIZEGAME:
                 InitializeGameHandler(&deserialized_data, &(packet.source));
@@ -376,8 +371,8 @@ void Server::DisconnectHandler(msgpack::object_handle * deserialized_data, socka
     gameState->DisconnectSession(packet.sessionId);
 }
 
-void Server::ListCharactersHandler(msgpack::object_handle * deserialized_data, sockaddr_in *client) {
-    packets::Listcharacters packet;
+void Server::ListUsersHandler(msgpack::object_handle * deserialized_data, sockaddr_in *client) {
+    packets::Listusers packet;
     // Wrap this in a try catch, so bad cast doesn't crash the whole server
     try {
         deserialized_data->get().convert(packet);
@@ -393,27 +388,27 @@ void Server::ListCharactersHandler(msgpack::object_handle * deserialized_data, s
         return;
     }
     std::string account = gameState->GetSessionAccountName(packet.sessionId);
-    std::cout << "Account: " << account << " requested their character list." << std::endl;
+    std::cout << "Account: " << account << " requested their user list." << std::endl;
 
-    // TODO: Need to get an actual list of the player's characters
+    // TODO: Need to get an actual list of the player's users
 
-    packets::Listcharacters returnPacket;
+    packets::Listusers returnPacket;
     returnPacket.sessionId = packet.sessionId;
     // TODO: return the same packetId that it came with?
     returnPacket.packetId = packet.packetId;
     // TODO: For testing only
-        returnPacket.characters.push_back(std::string("Grapthar")); // Test
-        returnPacket.characters.push_back(std::string("Harry Potter")); // Test
-        returnPacket.characters.push_back(std::string("Willy Wonka")); // Test
+        returnPacket.users.push_back(std::string("Grapthar")); // Test
+        returnPacket.users.push_back(std::string("Harry Potter")); // Test
+        returnPacket.users.push_back(std::string("Willy Wonka")); // Test
     // Use MessagePack to serialize data
     std::stringstream buffer;
     msgpack::pack(buffer, returnPacket);
     // Send the packet
-    utils::SendDataTo(sockfd, &buffer, packets::LISTCHARACTERS, client);
+    utils::SendDataTo(sockfd, &buffer, packets::LISTUSERS, client);
 }
 
-void Server::SelectCharacterHandler(msgpack::object_handle * deserialized_data, sockaddr_in *client) {
-    packets::Selectcharacter packet;
+void Server::SelectUserHandler(msgpack::object_handle * deserialized_data, sockaddr_in *client) {
+    packets::Selectuser packet;
     // Wrap this in a try catch, so bad cast doesn't crash the whole server
     try {
         deserialized_data->get().convert(packet);
@@ -427,17 +422,17 @@ void Server::SelectCharacterHandler(msgpack::object_handle * deserialized_data, 
         utils::SendErrorTo(sockfd, std::string("Invalid session"), client);
         return;
     }
-    std::cout << "TODO: Need to select character " << packet.character << std::endl;
-    // TODO: Select the requested character
+    std::cout << "TODO: Need to select user " << packet.user << std::endl;
+    // TODO: Select the requested user
     gameState->SelectPlayer(packet.sessionId);
 }
 
-void Server::DeleteCharacterHandler(msgpack::object_handle * deserialized_data, sockaddr_in *client) {
-    std::cout << "TODO: Delete Character handler!" << std::endl;
+void Server::DeleteUserHandler(msgpack::object_handle * deserialized_data, sockaddr_in *client) {
+    std::cout << "TODO: Delete User handler!" << std::endl;
 }
 
-void Server::CreateCharacterHandler(msgpack::object_handle * deserialized_data, sockaddr_in *client) {
-    packets::Createcharacter packet;
+void Server::CreateUserHandler(msgpack::object_handle * deserialized_data, sockaddr_in *client) {
+    packets::Createuser packet;
     // Wrap this in a try catch, so bad cast doesn't crash the whole server
     try {
         deserialized_data->get().convert(packet);
@@ -453,7 +448,7 @@ void Server::CreateCharacterHandler(msgpack::object_handle * deserialized_data, 
     }
 
     // TODO:
-    std::cout << "TODO: Create character " << packet.lastName << ", " <<  packet.firstName << std::endl;
+    std::cout << "TODO: Create user " << packet.lastName << ", " <<  packet.firstName << std::endl;
 }
 
 void Server::InitializeGameHandler(msgpack::object_handle * deserialized_data, sockaddr_in *client) {

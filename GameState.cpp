@@ -21,7 +21,6 @@
 GameState::GameState(Server * server, SQLConnector * sql) {
     this->server = server;
     this->sql = sql;
-    npcs = sql->GetNpcs();
     curSession = 1;
 }
 
@@ -99,9 +98,9 @@ void GameState::SelectPlayer(int sessionId) {
 //    return void;
 //}
 
-void GameState::StorePlayer(std::string name) {
-    return;
-}
+// void GameState::StorePlayer(std::string name) {
+//     return;
+// }
 
 int GameState::GenerateSession(int sessionId) {
     if (sessions.find(sessionId) != sessions.end()) {
@@ -123,10 +122,7 @@ std::string GameState::GetSessionAccountName(int sessionId) {
     return sessionAccounts[sessionId];
 }
 
-std::vector<Player> GameState::getPlayers() {
-    return players;
+std::vector<User> GameState::getUsers() {
+    return users;
 }
 
-std::vector<Npc> GameState::getNPCs() {
-  return npcs;
-}

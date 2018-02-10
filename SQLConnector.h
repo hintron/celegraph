@@ -1,16 +1,10 @@
-// Filename:    SQLConnector.h
-// Author:      Joseph DeVictoria
-// Date:        Feb_29_2016
-// Purpose:     Header for SQL Connector class.
+// SQL Connector class to handle SQLite3 queries.
 
-#ifndef OLDENTIDE_SQLCONNECTOR_H
-#define OLDENTIDE_SQLCONNECTOR_H
+#ifndef CELEGRAPH_SQLCONNECTOR_H
+#define CELEGRAPH_SQLCONNECTOR_H
 
 #include "SQLiteCpp/SQLiteCpp.h"
-#include "Character.h"
-#include "Player.h"
-#include "Item.h"
-#include "Npc.h"
+#include "User.h"
 #include <string>
 #include <vector>
 // #include <set>
@@ -26,16 +20,13 @@ class SQLConnector{
         // Create
         //////////
         int InsertAccount(std::string, std::string, std::string, std::string);
-        int InsertPlayer(Player newPlayer, int account_id);
-        int InsertNpc(Npc newNpc);
-        int InsertItem(Item newItem);
+        int InsertUser(User newUser, int account_id);
 
         //////////
         // Read
         //////////
         std::vector<std::string> GetAccounts();
-        std::vector<std::string> GetPlayerList(std::string account);
-        std::vector<Npc> GetNpcs();
+        std::vector<std::string> GetUserList(std::string account);
         bool GetAccountSalt(char *, char *);
         int GetAccountKey(char *, char *);
 
@@ -56,4 +47,4 @@ class SQLConnector{
         SQLite::Database db;
 };
 
-#endif // OLDENTIDE_SQLCONNECTOR_H
+#endif // CELEGRAPH_SQLCONNECTOR_H

@@ -1,10 +1,7 @@
-// Filename:    Utils.h
-// Author:      Joseph DeVictoria
-// Date:        Mar_10_2016
-// Purpose:     Header for miscellaneous functions.
+// Header for miscellaneous functions.
 
-#ifndef OLDENTIDE_UTILS_H
-#define OLDENTIDE_UTILS_H
+#ifndef CELEGRAPH_UTILS_H
+#define CELEGRAPH_UTILS_H
 
 #include <string>
 #include <vector>
@@ -37,4 +34,4 @@ namespace utils{
 };
 
 
-#endif // OLDENTIDE_UTILS_H
+#endif // CELEGRAPH_UTILS_H

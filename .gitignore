@@ -1,5 +1,5 @@
 # Ignore executables
-bin
+bin/
 
 # Ignore local libraries and headers
 include
@@ -34,12 +34,6 @@ sqlitecpp
 # Executables
 *.exe
 *.out
-
-# Binary Files
-bin/*
-
-# Builds
-# build/*
 
 # Database
 *.db

@@ -1,11 +1,9 @@
-# Oldentide Docker File
-
 # How To Use:
 
 # make sure the docker daemon is running (dockerd)
 # cd into this directory and run:
-#   docker build -t oldentide_server .
-#   docker run -it -p 1337:1337/udp oldentide_server
+#   docker build -t celegraph_server .
+#   docker run -it -p 1337:1337/udp celegraph_server
 #   ./bin/Server 1337
 # This will map the docker container to localhost's 1337 port
 # Now access it via another shell like so:
@@ -15,10 +13,10 @@
 FROM alpine:3.6
 
 # Set the working directory
-WORKDIR /oldentide
+WORKDIR /celegraph
 
 # Copy the current directory contents into the container at the working directory
-ADD . /oldentide
+ADD . /celegraph
 
 # --no-cache is like --update, but deletes package list cache automatically
 # To search for valid packages, go to https://pkgs.alpinelinux.org/packages

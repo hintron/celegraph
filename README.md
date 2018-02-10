@@ -64,6 +64,17 @@ Inside the container, run:
     ./bin/Server 1337
 
 
+Project TODO:
+------------
+-Get rid of Oldentide vestiges
+
+-Use one of the other C message pack implementations that are lighter and faster. This will help reduce compile times.
+
+-Make sure that packet and user input can't overflow space for strings, to prevent against buffer overflow exploits.
+
+-Look into libraries that can make my life easier, but not add to complexity and compile time
+
+-Create a diagram of how Celegraph works
 
 
 [1]: http://www.cppreference.com/ "C / C++ reference"

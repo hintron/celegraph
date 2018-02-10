@@ -1,17 +1,11 @@
-// Filename:    Server.h
-// Author:      Joseph DeVictoria
-// Date:        Jan_31_2016
-// Purpose:     Header for dedicated server class.
-//              This server is a traditional Universal Datagram Protocol
-//              (UDP) Server which will receive and handle all game
-//              packets sent from client.
+// This server is a UDP Server which will receive and handle all
+// packets sent from the client.
 
-#ifndef OLDENTIDE_OLDENTIDESERVER_H
-#define OLDENTIDE_OLDENTIDESERVER_H
+#ifndef CELEGRAPH_SERVER_H
+#define CELEGRAPH_SERVER_H
 
-#include "Npc.h"
 #include "Packets.h"
-#include "Player.h"
+#include "User.h"
 #include "SQLConnector.h"
 #include <arpa/inet.h>
 #include <set>
@@ -56,10 +50,10 @@ class Server{
         void AckHandler(msgpack::object_handle *data, sockaddr_in *client);
         void ConnectHandler(msgpack::object_handle *data, sockaddr_in *client);
         void DisconnectHandler(msgpack::object_handle *data, sockaddr_in *client);
-        void ListCharactersHandler(msgpack::object_handle *data, sockaddr_in *client);
-        void SelectCharacterHandler(msgpack::object_handle *data, sockaddr_in *client);
-        void DeleteCharacterHandler(msgpack::object_handle *data, sockaddr_in *client);
-        void CreateCharacterHandler(msgpack::object_handle *data, sockaddr_in *client);
+        void ListUsersHandler(msgpack::object_handle *data, sockaddr_in *client);
+        void SelectUserHandler(msgpack::object_handle *data, sockaddr_in *client);
+        void DeleteUserHandler(msgpack::object_handle *data, sockaddr_in *client);
+        void CreateUserHandler(msgpack::object_handle *data, sockaddr_in *client);
         void InitializeGameHandler(msgpack::object_handle *data, sockaddr_in *client);
         void UpdatePcHandler(msgpack::object_handle *data, sockaddr_in *client);
         void UpdateNpcHandler(msgpack::object_handle *data, sockaddr_in *client);
@@ -69,4 +63,4 @@ class Server{
         void UnityHandler(msgpack::object_handle *data, sockaddr_in *client);
 };
 
-#endif //OLDENTIDE_SERVER_H
+#endif //CELEGRAPH_SERVER_H

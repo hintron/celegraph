@@ -1,7 +1,4 @@
-// Filename:    Main.cpp
-// Author:      Joseph DeVictoria
-// Date:        Jan_31_2016
-// Purpose:     Contains the main method for the Oldentide dedicated server.
+// Contains the main method for the Celegraph server.
 
 #include "Server.h"
 #include <cstdlib>
@@ -23,7 +20,7 @@ int main(int argc, char* argv[]) {
     }
     catch (std::exception& e) {
         std::cout << "exception: " << e.what() << std::endl;
-        std::cout << "Does db file db/Oldentide.db exist, and is it available?" << std::endl;
+        std::cout << "Does db file db/celegraph.db exist, and is it available?" << std::endl;
         return 1;
     }
     server->Run();

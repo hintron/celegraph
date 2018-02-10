@@ -1,10 +1,7 @@
-// Filename:    Packets.h
-// Author:      Joseph DeVictoria
-// Date:        Feb_14_2016
-// Purpose:     UDP Packet Struct Definitions.
+// UDP Packet Struct Definitions.
 
-#ifndef PACKETS_H
-#define PACKETS_H
+#ifndef CELEGRAPH_PACKETS_H
+#define CELEGRAPH_PACKETS_H
 
 #include <msgpack.hpp>
 
@@ -22,10 +19,10 @@ namespace packets {
         ERROR = 5,
         // CREATEACCOUNT = 6,
         // LOGIN = 7,
-        LISTCHARACTERS = 8,
-        SELECTCHARACTER = 9,
-        DELETECHARACTER = 10,
-        CREATECHARACTER = 11,
+        LISTUSERS = 8,
+        SELECTUSER = 9,
+        DELETEUSER = 10,
+        CREATEUSER = 11,
         INITIALIZEGAME = 12,
         UPDATEPC = 13,
         UPDATENPC = 14,
@@ -96,44 +93,37 @@ namespace packets {
         MSGPACK_DEFINE(packetId, sessionId, errorMsg);
     };
 
-    class Listcharacters {
+    class Listusers {
     public:
         int32_t packetId;
         int32_t sessionId;
-        // Array of characters!
-        std::vector<std::string> characters;
-        MSGPACK_DEFINE(packetId, sessionId, characters);
+        // Array of users!
+        std::vector<std::string> users;
+        MSGPACK_DEFINE(packetId, sessionId, users);
     };
 
-    class Selectcharacter {
+    class Selectuser {
     public:
         int32_t packetId;
         int32_t sessionId;
-        std::string character;
-        MSGPACK_DEFINE(packetId, sessionId, character);
+        std::string user;
+        MSGPACK_DEFINE(packetId, sessionId, user);
     };
 
-    class Deletecharacter {
+    class Deleteuser {
     public:
         int32_t packetId;
         int32_t sessionId;
-        std::string character;
-        MSGPACK_DEFINE(packetId, sessionId, character);
+        std::string user;
+        MSGPACK_DEFINE(packetId, sessionId, user);
     };
 
-    class Createcharacter {
+    class Createuser {
     public:
         int32_t packetId;
         int32_t sessionId;
         std::string firstName;
         std::string lastName;
-        std::string guild;
-        std::string race;
-        std::string gender;
-        std::string face;
-        std::string skin;
-        std::string profession;
-
 
         std::map<std::string, uint32_t> attributes;
 
@@ -142,12 +132,6 @@ namespace packets {
             sessionId,
             firstName,
             lastName,
-            guild,
-            race,
-            gender,
-            face,
-            skin,
-            profession,
             attributes
         );
     };
@@ -253,4 +237,4 @@ namespace packets {
 } // End packets namespace
 
 
-#endif //PACKETS_H
+#endif //CELEGRAPH_PACKETS_H

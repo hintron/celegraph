@@ -1,13 +1,12 @@
-# Oldentide Dedicated Server Container
 # debian - jessie slim
 
 FROM debian:jessie-slim
 
 # Set the working directory
-WORKDIR /oldentide
+WORKDIR /celegraph
 
 # Copy the current directory contents into the container at the working directory
-ADD . /oldentide
+ADD . /celegraph
 
 RUN apt-get update && apt-get install -y \
     build-essential \

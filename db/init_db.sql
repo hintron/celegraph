@@ -31,13 +31,13 @@ CREATE TABLE user (
 -- Views
 ------------------------
 
--- DROP VIEW IF EXISTS view_players;
--- CREATE VIEW view_players AS
--- SELECT
---     *
--- FROM players
--- LEFT JOIN accounts on players.account_id = accounts.id
--- ;
+DROP VIEW IF EXISTS view_users;
+CREATE VIEW view_users AS
+SELECT
+    *
+FROM users
+LEFT JOIN accounts on users.account_id = accounts.id
+;
 
 
 -- References

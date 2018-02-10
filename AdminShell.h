@@ -1,11 +1,8 @@
-// Filename:    AdminShell.h
-// Author:      Joseph DeVictoria
-// Date:        Mar_6_2016
-// Purpose:     Header for the Administrator shell class used to implement
-//              server commands.
+// Provides an interface for the administrator to interact with
+// the server.  This class will handle all server admin commands.
 
-#ifndef OLDENTIDE_ADMINSHELL_H
-#define OLDENTIDE_ADMINSHELL_H
+#ifndef CELEGRAPH_ADMINSHELL_H
+#define CELEGRAPH_ADMINSHELL_H
 
 #include "GameState.h"
 #include "SQLConnector.h"
@@ -32,4 +29,4 @@ class AdminShell {
         char serverHostname[HOST_NAME_MAX];
 };
 
-#endif // OLDENTIDE_ADMINSHELL_H
+#endif // CELEGRAPH_ADMINSHELL_H

@@ -1,20 +1,20 @@
-BIN = mkdir database server client unittest
+BIN = mkdir database server client test
 
 # Set the compiler
-# COMPILER = g++
-COMPILER = clang++
+COMPILER = g++
+# COMPILER = clang++
 # COMPILER = em++
 
-# Keep 3rd party files local, to simplify life (no sudo or messing with os files)
+# Locally install 3rd party files, to simplify life (no sudo or messing with os files or os package managers)
 MSGPACK_HEADER = -I msgpack
 CATCH_HEADER = -I catch
 SQLITE_HEADERS = -I sqlitecpp
 SQLITE_LIBS = -L sqlitecpp
 
 
-SERVER_FILES = 		Main.cpp AdminShell.cpp Character.cpp GameState.cpp Npc.cpp Item.cpp Server.cpp Player.cpp SQLConnector.cpp Utils.cpp
-CLIENT_FILES = 		TestClient.cpp Utils.cpp
-UNITTEST_FILES = 	UnitTest.cpp AdminShell.cpp Character.cpp GameState.cpp Npc.cpp Item.cpp Server.cpp Player.cpp SQLConnector.cpp Utils.cpp
+SERVER_FILES = 		Main.cpp AdminShell.cpp User.cpp GameState.cpp Server.cpp SQLConnector.cpp Utils.cpp
+CLIENT_FILES = 		Client.cpp Utils.cpp
+UNITTEST_FILES = 	UnitTest.cpp AdminShell.cpp GameState.cpp Server.cpp User.cpp SQLConnector.cpp Utils.cpp
 
 # Enable sqlitecpp to use query.getColumnOriginName() via -DSQLITE_ENABLE_COLUMN_METADATA
 # Add -DSQLITE_USE_LEGACY_STRUCT to make sqlitecpp only work with sqlite versions <= 3.18
@@ -31,16 +31,16 @@ database db : mkdir
 
 # NOTE: With gcc/g++, dependent libraries need to be specified BEFORE the library it depends on
 server : mkdir msgpack sqlitecpp
-	$(COMPILER) -g $(SERVER_FILES) -std=c++11 $(MSGPACK_HEADER) $(SQLITE_HEADERS) $(SQLITE_LIBS) -lSQLiteCpp -lsqlite3 -ldl -lpthread -o bin/Server $(DEFS)
+	$(COMPILER) -g $(SERVER_FILES) -std=c++11 $(MSGPACK_HEADER) $(SQLITE_HEADERS) $(SQLITE_LIBS) -lSQLiteCpp -lsqlite3 -ldl -lpthread -o bin/server $(DEFS)
 
 client : mkdir msgpack
-	$(COMPILER) -g $(CLIENT_FILES) -std=c++11 $(MSGPACK_HEADER) -lpthread -o bin/Client
+	$(COMPILER) -g $(CLIENT_FILES) -std=c++11 $(MSGPACK_HEADER) -lpthread -o bin/client
 
-unittest : mkdir msgpack catch sqlitecpp
-	$(COMPILER) -g $(UNITTEST_FILES) -std=c++11 $(CATCH_HEADER) $(MSGPACK_HEADER) $(SQLITE_HEADERS) $(SQLITE_LIBS) -lSQLiteCpp -lsqlite3 -ldl -lpthread -o bin/UnitTest $(DEFS)
+test : mkdir msgpack catch sqlitecpp
+	$(COMPILER) -g $(UNITTEST_FILES) -std=c++11 $(CATCH_HEADER) $(MSGPACK_HEADER) $(SQLITE_HEADERS) $(SQLITE_LIBS) -lSQLiteCpp -lsqlite3 -ldl -lpthread -o bin/test $(DEFS)
 
 clean :
-	rm -f bin/Server bin/Client bin/UnitTest;
+	rm -f bin/server bin/client bin/test;
 
 cleanall : clean
 	rm -rf msgpack;
@@ -111,7 +111,7 @@ sqlitecpp :
 # and be sure to also add -DSQLITE_USE_LEGACY_STRUCT to the g++ DEFS make variable above, or you'll get some errors in the headers
 
 
-.PHONY: all, clean, cleanall, cleansql, mkdir, database, db, server, client, unittest, msgpack, catch, sqlitecpp
+.PHONY: all, clean, cleanall, cleansql, mkdir, database, db, server, client, test, msgpack, catch, sqlitecpp
 
 
 

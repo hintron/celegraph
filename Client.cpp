@@ -1,7 +1,4 @@
-// Filename:    TestClient.cpp
-// Author:      Joseph DeVictoria
-// Date:        2_10_2013
-// Purpose:     Act as an intermediate test platform for proving server functionality.
+// Command-line client to send and receive messages
 
 #include "Packets.h"
 #include <arpa/inet.h>
@@ -185,76 +182,76 @@ int main(int argc, char * argv[]) {
             }
             // Logged In.
             case 2: {
-                bool hasNoCharacter = true;
+                bool hasNoUser = true;
 
-                while(hasNoCharacter) {
-                    // Request a list of characters
-                    packets::Listcharacters p;
+                while(hasNoUser) {
+                    // Request a list of users
+                    packets::Listusers p;
                     p.packetId = packetNumber;
                     packetNumber++;
                     p.sessionId = session;
 
                     std::stringstream buffer;
                     msgpack::pack(buffer, p);
-                    utils::SendDataTo(sockfd, &buffer, packets::LISTCHARACTERS, &servaddr);
+                    utils::SendDataTo(sockfd, &buffer, packets::LISTUSERS, &servaddr);
 
                     // Wait for the response
                     packets::packet_t retPacket = WaitOnPacketQueue();
                     uint8_t packetType;
                     msgpack::object_handle deserialized = utils::GetDataFromPacket(retPacket.data, &packetType);
-                    packets::Listcharacters characterList;
-                    deserialized.get().convert(characterList);
+                    packets::Listusers userList;
+                    deserialized.get().convert(userList);
 
-                    std::cout << "Number of available characters: " << characterList.characters.size() << std::endl;
-                    if (characterList.characters.size() == 0) {
-                        std::cout << "You do not have any characters selected on this account" << std::endl;
-                        std::cout << "Please give me a first name for your new character: ";
+                    std::cout << "Number of available users: " << userList.users.size() << std::endl;
+                    if (userList.users.size() == 0) {
+                        std::cout << "You do not have any users selected on this account" << std::endl;
+                        std::cout << "Please give me a first name for your new user: ";
                         std::string firstName;
                         std::getline(std::cin, firstName);
                         std::cout << firstName << std::endl;
-                        std::cout << "Please give me a last name for your new character: ";
+                        std::cout << "Please give me a last name for your new user: ";
                         std::string lastName;
                         std::getline(std::cin, lastName);
 
-                        packets::Createcharacter newCharacter;
-                        newCharacter.packetId = packetNumber;
+                        packets::Createuser newUser;
+                        newUser.packetId = packetNumber;
                         packetNumber++;
-                        newCharacter.sessionId = session;
-                        newCharacter.firstName = firstName;
-                        newCharacter.lastName = lastName;
+                        newUser.sessionId = session;
+                        newUser.firstName = firstName;
+                        newUser.lastName = lastName;
 
                         std::stringstream buffer2;
-                        msgpack::pack(buffer2, newCharacter);
-                        utils::SendDataTo(sockfd, &buffer, packets::CREATECHARACTER, &servaddr);
+                        msgpack::pack(buffer2, newUser);
+                        utils::SendDataTo(sockfd, &buffer, packets::CREATEUSER, &servaddr);
 
-                        // After creating the new character, loop back to the top
+                        // After creating the new user, loop back to the top
                         // and send a new request for the list of players.
-                        // If the create was successful, then there should be a haracter
+                        // If the create was successful, then there should be a user
                     }
                     else {
-                        hasNoCharacter = false;
-                        for (int i = 0; i < characterList.characters.size(); ++i) {
-                            if(characterList.characters.at(i) != ""){
-                                std::cout << "Character " << i << ": " << characterList.characters.at(i) << std::endl;
+                        hasNoUser = false;
+                        for (int i = 0; i < userList.users.size(); ++i) {
+                            if(userList.users.at(i) != ""){
+                                std::cout << "User " << i << ": " << userList.users.at(i) << std::endl;
                             }
                         }
                     }
-                } // End has no character while loop
+                } // End has no user while loop
 
-                // std::cout << "Please select a character: " << std::endl;
+                // std::cout << "Please select a user: " << std::endl;
                 // std::string name;
                 // getline(std::cin, name);
-                // std::cout << "TODO: Attempting to select character " << name << ": " << std::endl;
+                // std::cout << "TODO: Attempting to select user " << name << ": " << std::endl;
 
-                // packets::Selectcharacter characterToSelect;
-                // characterToSelect.packetId = packetNumber;
+                // packets::Selectuser userToSelect;
+                // userToSelect.packetId = packetNumber;
                 // packetNumber++;
-                // characterToSelect.sessionId = session;
-                // characterToSelect.character = name;
+                // userToSelect.sessionId = session;
+                // userToSelect.user = name;
 
                 // std::stringstream buffer;
-                // msgpack::pack(buffer, characterToSelect);
-                // utils::SendDataTo(sockfd, &buffer, packets::SELECTCHARACTER, &servaddr);
+                // msgpack::pack(buffer, userToSelect);
+                // utils::SendDataTo(sockfd, &buffer, packets::SELECTUSER, &servaddr);
 
                 clientState = 3;
                 std::cout << "Now, send commands to the server!" << std::endl;

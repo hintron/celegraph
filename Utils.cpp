@@ -1,7 +1,4 @@
-// Filename:    utils.cpp
-// Author:      Joseph DeVictoria
-// Date:        Mar_10_2016
-// Purpose:     Miscellaneous functions.
+// Miscellaneous utility functions used across Celegraph.
 
 #include "Utils.h"
 #include "Packets.h"
