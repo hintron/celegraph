@@ -1,34 +1,23 @@
-Oldentide Dedicated Server
+Celegraph
 ==
-The *Oldentide Dedicated Server* is an open source project, built in [C++][1], to implement the
-backend game state for the multiplayer online role-playing game [*Oldentide*][2].  This
-directory contains all of the code necessary to build and run the dedicated server.
+*Celegraph* is an open-source internet messaging library, written in [C++][1].
 
-The "from scratch" build process breaks down into three main steps, with an additional
-step used during the development process:
+Celegraph was derived from a messaging system developed in [*Oldentide*][2], an open-source multiplayer online role-playing game. Be sure to check it out!
 
-1. Create the database and generate all of the needed tables.
-2. Populate the database with NPC information.
-3. Compile the dedicated server.
-4. Compile the test client.
+Celegraph aims to provide an easy-to-use and fast messaging library over UDP.
+
 
 Requirements
 ------------
-The *Oldentide Dedicated Server* currently supports a Linux development and runtime environment.
+*Celegraph* currently supports a Linux development and runtime environment.
 
 Operating Systems
 ------------
-All development and testing is currently done on a 64-Bit linux environment.
-[Ubuntu 16.04.1 LTS][3] is recommended, but other distributions have been known to work,
-too, including Debian, Fedora, Alpine, and Windows Bash.
+All development and testing is currently done on a 64-bit linux environment. [Ubuntu 16.04.1 LTS][3] is recommended, but other distributions have been known to work, too, including Debian, Fedora, Alpine, and Windows Subsystem for Linux (i.e. WSL or Windows Bash).
 
 Compilers
 ------------
-Building *Oldentide Dedicated Server* is currently possible with the following compiler:
-* *g++* - Currently all development is done on the [g++][4] compiler in a 64-bit
-   environment.  A makefile is included to simplify compilation!
-
-*cmake may possibly be supported in future releases...*
+Celegraph aims to support g++ and clang. The emscripten compiler might be explicitly supported in the future.
 
 Dependencies
 ------------
