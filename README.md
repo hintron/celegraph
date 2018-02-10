@@ -31,7 +31,7 @@ Dependencies
 
 Server and Test Client Usage
 ------------
-In linux, cd into Oldentide/Server/ and run
+In linux, cd to celegraph/ and run
 
     make
 
