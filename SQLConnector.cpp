@@ -107,7 +107,7 @@ int SQLConnector::InsertAccount(std::string accountName, std::string email, std:
         std::cout << "Salt is invalid! Cannot insert account record" << std::endl;
         return false;
     }
-    std::string query_string("insert into accounts (accountname, valid, email, playing, key, salt) values (?,?,?,?,?,?)");
+    std::string query_string("insert into account (accountname, valid, email, active, key, salt) values (?,?,?,?,?,?)");
     try {
         SQLite::Statement query(db, query_string);
         query.bind(1, accountName);
@@ -196,7 +196,7 @@ int SQLConnector::InsertUser(User u, int account_id) {
 std::vector<std::string> SQLConnector::GetAccounts() {
     std::vector<std::string> accounts;
 
-    std::string cmd("SELECT accountname FROM accounts ORDER BY accountname");
+    std::string cmd("SELECT accountname FROM account ORDER BY accountname");
     SQLite::Statement query(db, cmd);
     while (query.executeStep()) {
         accounts.push_back(query.getColumn(0));
@@ -208,7 +208,7 @@ std::vector<std::string> SQLConnector::GetAccounts() {
 std::vector<std::string> SQLConnector::GetUserList(std::string accountname) {
     std::vector<std::string> users;
 
-    std::string cmd("SELECT firstname, lastname, accountname FROM view_users WHERE accountname = ? ORDER BY lastname");
+    std::string cmd("SELECT firstname, lastname, accountname FROM view_user WHERE accountname = ? ORDER BY lastname");
     SQLite::Statement query(db, cmd);
     query.bind(1, accountname);
 
@@ -229,7 +229,7 @@ bool SQLConnector::GetAccountSalt(char *accountName, char *saltStringHex) {
     }
     char *errorMessage = NULL;
     std::stringstream query;
-    query << "select salt from accounts where accountname = \"" << accountName << "\"";
+    query << "select salt from account where accountname = \"" << accountName << "\"";
     // TODO: Get the salt
 
     if (utils::SanitizeHexString(saltStringHex)) {
@@ -249,7 +249,7 @@ int SQLConnector::GetAccountKey(char *accountName, char *keyStringHex) {
     // }
     // char *errorMessage = NULL;
     // std::stringstream query;
-    // query << "select key from accounts where accountname = \"" << accountName << "\"";
+    // query << "select key from account where accountname = \"" << accountName << "\"";
     // //std::cout << query.str() << std::endl;
     // // The fourth param is passed to the callback function as a void pointer to the first param
     // sqls = sqlite3_exec(database, query.str().c_str(), &ReturnStringCallback, keyStringHex, &errorMessage);

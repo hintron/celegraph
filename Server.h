@@ -29,14 +29,14 @@ class Server{
     private:
         int sockfd;
         SQLConnector * sql;
-        ServerState * gameState;
+        ServerState * serverState;
         AdminShell * adminshell;
         std::queue<packets::packet_t> packetQueue;
         // Session to socket mapping
         std::map<int, sockaddr_in> activeConnections;
 
         // Wrap all globals accessed in WorkerThread with mutexes
-        std::mutex gameStateMutex;
+        std::mutex serverStateMutex;
         std::mutex packetQueueMutex;
         std::mutex activeConnectionsMutex;
         // NOTE: Sockets are atomic, so they are thread safe

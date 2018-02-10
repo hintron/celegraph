@@ -70,6 +70,8 @@ Project TODO:
 
 -Make the client select user to talk to once, instead of each time
 
+-Create a src directory, and separate it from test code
+
 -Use one of the other C message pack implementations that are lighter and faster. This will help reduce compile times.
 
 -Make sure that packet and user input can't overflow space for strings, to prevent against buffer overflow exploits.
@@ -77,6 +79,14 @@ Project TODO:
 -Look into libraries that can make my life easier, but not add to complexity and compile time
 
 -Create a diagram of how Celegraph works
+
+-Change Main to server_main
+
+-Change things to underscore_case
+
+-Try using DTLS - secure UDP with wolfssl (https://github.com/wolfSSL/wolfssl)
+(https://github.com/wolfSSL/wolfssl-examples)
+
 
 
 [1]: http://www.cppreference.com/ "C / C++ reference"

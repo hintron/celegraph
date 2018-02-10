@@ -21,8 +21,8 @@
 
 Server::Server(int port) {
     sql = new SQLConnector();
-    gameState = new ServerState(this, sql);
-    adminshell = new AdminShell(this, sql, gameState);
+    serverState = new ServerState(this, sql);
+    adminshell = new AdminShell(this, sql, serverState);
 
     // Create server address struct.
     sockaddr_in server;
@@ -47,7 +47,7 @@ Server::Server(int port) {
 
 Server::~Server() {
     delete sql;
-    delete gameState;
+    delete serverState;
     delete adminshell;
 }
 
@@ -289,8 +289,8 @@ void Server::GenericHandler(msgpack::object_handle * deserialized_data, sockaddr
         return;
     }
 
-    std::lock_guard<std::mutex> lk(gameStateMutex);
-    if(!gameState->VerifySession(packet.sessionId)){
+    std::lock_guard<std::mutex> lk(serverStateMutex);
+    if(!serverState->VerifySession(packet.sessionId)){
         // Quit early if invalid session
         std::cout << "Invalid session. Not doing anything" << std::endl;
         return;
@@ -308,15 +308,15 @@ void Server::AckHandler(msgpack::object_handle * deserialized_data, sockaddr_in 
         return;
     }
 
-    std::lock_guard<std::mutex> lk(gameStateMutex);
-    if(!gameState->VerifySession(packet.sessionId)){
+    std::lock_guard<std::mutex> lk(serverStateMutex);
+    if(!serverState->VerifySession(packet.sessionId)){
         // Quit early if invalid session
         std::cout << "Invalid session. Not doing anything" << std::endl;
         return;
     }
 }
 
-// Connect a host to the server by generating a session for it, and adding it to the gamestate sessions.
+// Connect a host to the server by generating a session for it, and adding it to the serverstate sessions.
 void Server::ConnectHandler(msgpack::object_handle * deserialized_data, sockaddr_in *client) {
     packets::Connect packet;
     // Wrap this in a try catch, so bad cast doesn't crash the whole server
@@ -329,9 +329,9 @@ void Server::ConnectHandler(msgpack::object_handle * deserialized_data, sockaddr
 
 
     // Generate the new sessionId
-    gameStateMutex.lock();
-    int newSession = gameState->GenerateSession(packet.sessionId);
-    gameStateMutex.unlock();
+    serverStateMutex.lock();
+    int newSession = serverState->GenerateSession(packet.sessionId);
+    serverStateMutex.unlock();
     // Save a copy of the connection information
     activeConnectionsMutex.lock();
     activeConnections[newSession] = *client;
@@ -362,13 +362,13 @@ void Server::DisconnectHandler(msgpack::object_handle * deserialized_data, socka
         return;
     }
 
-    std::lock_guard<std::mutex> lk(gameStateMutex);
-    if(!gameState->VerifySession(packet.sessionId)){
+    std::lock_guard<std::mutex> lk(serverStateMutex);
+    if(!serverState->VerifySession(packet.sessionId)){
         // Quit early if invalid session
         std::cout << "Invalid session. Not doing anything" << std::endl;
         return;
     }
-    gameState->DisconnectSession(packet.sessionId);
+    serverState->DisconnectSession(packet.sessionId);
 }
 
 void Server::ListUsersHandler(msgpack::object_handle * deserialized_data, sockaddr_in *client) {
@@ -381,13 +381,13 @@ void Server::ListUsersHandler(msgpack::object_handle * deserialized_data, sockad
         return;
     }
 
-    std::lock_guard<std::mutex> lk(gameStateMutex);
-    if(!gameState->VerifySession(packet.sessionId)){
+    std::lock_guard<std::mutex> lk(serverStateMutex);
+    if(!serverState->VerifySession(packet.sessionId)){
         // Quit early if invalid session
         utils::SendErrorTo(sockfd, std::string("Invalid session"), client);
         return;
     }
-    std::string account = gameState->GetSessionAccountName(packet.sessionId);
+    std::string account = serverState->GetSessionAccountName(packet.sessionId);
     std::cout << "Account: " << account << " requested their user list." << std::endl;
 
     // TODO: Need to get an actual list of the player's users
@@ -417,14 +417,14 @@ void Server::SelectUserHandler(msgpack::object_handle * deserialized_data, socka
         return;
     }
 
-    std::lock_guard<std::mutex> lk(gameStateMutex);
-    if(!gameState->VerifySession(packet.sessionId)){
+    std::lock_guard<std::mutex> lk(serverStateMutex);
+    if(!serverState->VerifySession(packet.sessionId)){
         utils::SendErrorTo(sockfd, std::string("Invalid session"), client);
         return;
     }
     std::cout << "TODO: Need to select user " << packet.user << std::endl;
     // TODO: Select the requested user
-    gameState->SelectPlayer(packet.sessionId);
+    serverState->SelectPlayer(packet.sessionId);
 }
 
 void Server::DeleteUserHandler(msgpack::object_handle * deserialized_data, sockaddr_in *client) {
@@ -441,8 +441,8 @@ void Server::CreateUserHandler(msgpack::object_handle * deserialized_data, socka
         return;
     }
 
-    std::lock_guard<std::mutex> lk(gameStateMutex);
-    if(!gameState->VerifySession(packet.sessionId)){
+    std::lock_guard<std::mutex> lk(serverStateMutex);
+    if(!serverState->VerifySession(packet.sessionId)){
         utils::SendErrorTo(sockfd, std::string("Invalid session"), client);
         return;
     }
@@ -471,15 +471,15 @@ void Server::SendPlayerCommandHandler(msgpack::object_handle * deserialized_data
         utils::SendErrorTo(sockfd, std::string("Failed to convert/cast msgpack object"), client);
         return;
     }
-    std::lock_guard<std::mutex> lk(gameStateMutex);
-    if(!gameState->VerifySession(packet.sessionId)){
+    std::lock_guard<std::mutex> lk(serverStateMutex);
+    if(!serverState->VerifySession(packet.sessionId)){
         utils::SendErrorTo(sockfd, std::string("Invalid session"), client);
         return;
     }
 
     // TODO: Get active session stuff working
-    // if (gameState->VerifyActiveSession(packet.sessionId)) {
-        gameState->PlayerCommand(packet.command, packet.sessionId);
+    // if (serverState->VerifyActiveSession(packet.sessionId)) {
+        serverState->PlayerCommand(packet.command, packet.sessionId);
     // }
     // else {
     //     std::cout << "Nonactive session requested to send a player command..." << packet.sessionId << std::endl;
