@@ -1,8 +1,8 @@
 // Maintains the users and
 // perform the bulk of database interactions.
 
-#ifndef CELEGRAPH_GAMESTATE_H
-#define CELEGRAPH_GAMESTATE_H
+#ifndef CELEGRAPH_SERVERSTATE_H
+#define CELEGRAPH_SERVERSTATE_H
 
 #include "SQLConnector.h"
 #include <set>
@@ -12,10 +12,10 @@
 
 class Server;
 
-class GameState{
+class ServerState{
     public:
-        GameState(Server * server, SQLConnector * sql);
-        ~GameState();
+        ServerState(Server * server, SQLConnector * sql);
+        ~ServerState();
         bool VerifySession(int sessionId);
         bool VerifyActiveSession(int sessionId);
         void DisconnectSession(int sessionId);
@@ -38,4 +38,4 @@ class GameState{
         // void StorePlayer(std::string name);
 };
 
-#endif // CELEGRAPH_GAMESTATE_H
+#endif // CELEGRAPH_SERVERSTATE_H

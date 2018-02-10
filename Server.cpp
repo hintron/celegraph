@@ -1,6 +1,6 @@
 #include "Server.h"
 #include "AdminShell.h"
-#include "GameState.h"
+#include "ServerState.h"
 #include <cstring>
 #include <iostream>
 #include <iterator>
@@ -21,7 +21,7 @@
 
 Server::Server(int port) {
     sql = new SQLConnector();
-    gameState = new GameState(this, sql);
+    gameState = new ServerState(this, sql);
     adminshell = new AdminShell(this, sql, gameState);
 
     // Create server address struct.

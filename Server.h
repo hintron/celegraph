@@ -16,7 +16,7 @@
 
 // forward declaration so AdminShell and Server can see each other
 class AdminShell;
-class GameState;
+class ServerState;
 
 class Server{
     public:
@@ -29,7 +29,7 @@ class Server{
     private:
         int sockfd;
         SQLConnector * sql;
-        GameState * gameState;
+        ServerState * gameState;
         AdminShell * adminshell;
         std::queue<packets::packet_t> packetQueue;
         // Session to socket mapping

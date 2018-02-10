@@ -1,12 +1,7 @@
-// Filename:    GameState.cpp
-// Author:      Joseph DeVictoria
-// Date:        Mar_2_2016
-// Purpose:     Game State Class implementation.
-//              This class will be responsible for maintaining the Players,
-//              NPCs necessary to preserve the game state.  It will also
-//              perform the bulk of database interactions.
+// Maintains state of the users
+// perform the bulk of database interactions.
 
-#include "GameState.h"
+#include "ServerState.h"
 #include "Server.h"
 #include "Utils.h"
 #include <iterator>
@@ -14,22 +9,18 @@
 #include <cstring>
 #include <map>
 
-#define MAX_MESSAGES 500
-#define MAX_MESSAGE_LENGTH 500
-
-
-GameState::GameState(Server * server, SQLConnector * sql) {
+ServerState::ServerState(Server * server, SQLConnector * sql) {
     this->server = server;
     this->sql = sql;
     curSession = 1;
 }
 
-GameState::~GameState() {
+ServerState::~ServerState() {
     return;
 }
 
 // Checks if the session id given by the user is valid before allowing further interaction.
-bool GameState::VerifySession(int sessionId) {
+bool ServerState::VerifySession(int sessionId) {
     if (sessions.find(sessionId) != sessions.end()) {
         return true;
     }
@@ -39,7 +30,7 @@ bool GameState::VerifySession(int sessionId) {
 }
 
 // Active sessions refer to users that have already authenticated and may or may not be already using a character.
-bool GameState::VerifyActiveSession(int sessionId) {
+bool ServerState::VerifyActiveSession(int sessionId) {
     if (activeSessions.find(sessionId) != activeSessions.end()) {
         return true;
     }
@@ -48,13 +39,13 @@ bool GameState::VerifyActiveSession(int sessionId) {
     }
 }
 
-void GameState::DisconnectSession(int sessionId) {
+void ServerState::DisconnectSession(int sessionId) {
     activeSessions.erase(sessionId);
     sessions.erase(sessionId);
     return;
 }
 
-void GameState::PlayerCommand(std::string pCommand, int sessionId) {
+void ServerState::PlayerCommand(std::string pCommand, int sessionId) {
     std::vector<std::string> pCommandTokens = utils::Tokenfy(pCommand, ' ');
     // e.g. /s 1 What's up, Client 1?
     // e.g. /s admin What's up, admin?
@@ -87,22 +78,22 @@ void GameState::PlayerCommand(std::string pCommand, int sessionId) {
     // std::cout << "Full player command: " << pCommand << std::endl;
 }
 
-void GameState::SelectPlayer(int sessionId) {
+void ServerState::SelectPlayer(int sessionId) {
     if (sessions.find(sessionId) != sessions.end()) {
         activeSessions.insert(sessionId);
     }
     return;
 }
 
-//Player GameState::ReadPlayer(std::string name) {
+//Player ServerState::ReadPlayer(std::string name) {
 //    return void;
 //}
 
-// void GameState::StorePlayer(std::string name) {
+// void ServerState::StorePlayer(std::string name) {
 //     return;
 // }
 
-int GameState::GenerateSession(int sessionId) {
+int ServerState::GenerateSession(int sessionId) {
     if (sessions.find(sessionId) != sessions.end()) {
         return sessionId;
     }
@@ -113,16 +104,16 @@ int GameState::GenerateSession(int sessionId) {
     }
 }
 
-void GameState::SetSessionAccountName(char *accountName, int sessionId) {
+void ServerState::SetSessionAccountName(char *accountName, int sessionId) {
     std::string accountNameString = accountName;
     sessionAccounts[sessionId] = accountNameString;
 }
 
-std::string GameState::GetSessionAccountName(int sessionId) {
+std::string ServerState::GetSessionAccountName(int sessionId) {
     return sessionAccounts[sessionId];
 }
 
-std::vector<User> GameState::getUsers() {
+std::vector<User> ServerState::getUsers() {
     return users;
 }
 

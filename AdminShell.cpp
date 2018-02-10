@@ -6,10 +6,10 @@
 #include <sstream>
 #include <string>
 
-AdminShell::AdminShell(Server * server, SQLConnector * sql, GameState * gameState) {
+AdminShell::AdminShell(Server * server, SQLConnector * sql, ServerState * server_state) {
     this->server = server;
     this->sql = sql;
-    this->gameState = gameState;
+    this->server_state = server_state;
     gethostname(serverHostname, HOST_NAME_MAX);
 }
 
@@ -33,7 +33,7 @@ void AdminShell::Run() {
 	    }while(adminCommand.empty());
         std::vector<std::string> adminTokens = utils::Tokenfy(adminCommand, ' ');
         if (adminTokens[0] == "/shutdown") {
-            std::cout << "Celegraph Dedicated Server is shutting down..." << std::endl;
+            std::cout << "Celegraph Server is shutting down..." << std::endl;
             exit(EXIT_SUCCESS);
             return;
         }
@@ -44,7 +44,7 @@ void AdminShell::Run() {
                     sql->ListAccounts();
                 }
                 if (adminTokens[1] == "users") {
-                    std::vector<User> users = gameState->getUsers();
+                    std::vector<User> users = server_state->getUsers();
                     for (int i = 0; i < users.size(); i++) {
                         User temp = users.at(i);
                         std::cout << temp.GetFirstname() << " " << temp.GetLastname() << std::endl;
@@ -104,12 +104,11 @@ void AdminShell::Run() {
 
 void AdminShell::PrintUsage() {
     std::cout << "Dedicated Server Admin Usage:" << std::endl;
-    std::cout << "/shutdown              = Shuts down the server." << std::endl;
-    std::cout << "/list <var>            = Lists all entities of given <var> on server, where <var> is [users, npcs, accounts, packets, packetqueue(pq)]." << std::endl;
-    std::cout << "/db <query>            = Runs a given sql query on the sqlite3 database." << std::endl;
-    std::cout << "/h <message>           = Broadcasts a message to all users." << std::endl;
-    std::cout << "/h <client> <message>  = Broadcasts a message to all users." << std::endl;
-    std::cout << "/create <gameObjectType> <id> = Manually creates a game object." << std::endl;
+    std::cout << "/shutdown                 = Shuts down the server." << std::endl;
+    std::cout << "/list <var>               = Lists all possible <var>s. [accounts, users, packets, packetqueue(pq)]." << std::endl;
+    std::cout << "/db <query>               = Runs a given sql query on the sqlite3 database." << std::endl;
+    std::cout << "/h <message>              = Broadcasts <message> to all users." << std::endl;
+    std::cout << "/h <client_id> <message>  = Sends <message> to user with <client_id> = ." << std::endl;
 }
 
 void AdminShell::PrintLogo() {

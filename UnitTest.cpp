@@ -5,7 +5,7 @@
 
 #include <catch.hpp>
 #include "AdminShell.h"
-#include "GameState.h"
+#include "ServerState.h"
 #include "User.h"
 #include "Packets.h"
 #include "Server.h"

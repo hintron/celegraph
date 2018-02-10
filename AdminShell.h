@@ -4,7 +4,7 @@
 #ifndef CELEGRAPH_ADMINSHELL_H
 #define CELEGRAPH_ADMINSHELL_H
 
-#include "GameState.h"
+#include "ServerState.h"
 #include "SQLConnector.h"
 #include <limits.h>
 #include <unistd.h>
@@ -16,7 +16,7 @@ class Server;
 
 class AdminShell {
     public:
-        AdminShell(Server * server, SQLConnector * sql, GameState * gameState);
+        AdminShell(Server * server, SQLConnector * sql, ServerState * server_state);
         ~AdminShell();
         void operator()();
         void Run();
@@ -25,7 +25,7 @@ class AdminShell {
     private:
         Server * server;
         SQLConnector * sql;
-        GameState * gameState;
+        ServerState * server_state;
         char serverHostname[HOST_NAME_MAX];
 };
 

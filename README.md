@@ -68,6 +68,8 @@ Project TODO:
 ------------
 -Get rid of Oldentide vestiges
 
+-Make the client select user to talk to once, instead of each time
+
 -Use one of the other C message pack implementations that are lighter and faster. This will help reduce compile times.
 
 -Make sure that packet and user input can't overflow space for strings, to prevent against buffer overflow exploits.
