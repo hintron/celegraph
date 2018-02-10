@@ -4,10 +4,10 @@
 # cd into this directory and run:
 #   docker build -t celegraph_server .
 #   docker run -it -p 1337:1337/udp celegraph_server
-#   ./bin/Server 1337
+#   ./bin/server 1337
 # This will map the docker container to localhost's 1337 port
 # Now access it via another shell like so:
-#   ./bin/Client 127.0.0.1 1337
+#   ./bin/client 127.0.0.1 1337
 
 # Base image
 FROM alpine:3.6

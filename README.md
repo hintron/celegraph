@@ -37,13 +37,13 @@ In linux, cd to celegraph/ and run
 
 If everything built properly, run
 
-    bin/Server <Port>
+    ./bin/server <Port>
 
 where <Port> is the port the server is using.
 
 To test that the server is running, in a separate terminal, run
 
-    bin/Client <IP> <Port>
+    ./bin/client <IP> <Port>
 
 Where <IP> is the address of the server and <Port> is the port of the server.
 
@@ -53,21 +53,19 @@ Docker
 To use Docker to run the server, first make sure the docker daemon is running (dockerd).
 Then build the image like so:
 
-    docker build -t oldentide_server .
+    docker build -t celegraph_server .
 
 Then create a container instance of the image like so:
 
-    docker run -it -p 1337:1337/udp oldentide_server
+    docker run -it -p 1337:1337/udp celegraph_server
 
 Inside the container, run:
 
-    ./bin/Server 1337
+    ./bin/server 1337
 
 
 Project TODO:
 ------------
--Get rid of Oldentide vestiges
-
 -Make the client select user to talk to once, instead of each time
 
 -Create a src directory, and separate it from test code

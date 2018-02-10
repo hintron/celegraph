@@ -196,7 +196,7 @@ void Server::BroadcastToConnections(std::string msg, std::string user){
     std::string broadcast;
     if(user == "admin"){
         isAdmin = true;
-        broadcast = ">>>BROADCAST Oldentide Admin: " + msg + " <<<";
+        broadcast = ">>>BROADCAST Celegraph Admin: " + msg + " <<<";
     }
     else {
         broadcast = ">>>BROADCAST Client " + user + ": " + msg + " <<<";
@@ -231,7 +231,7 @@ void Server::SendMessageToConnection(std::string msg, std::string fromUser, std:
 
     // Format the message
     if(fromUser == "admin"){
-        formattedMsg = ">>>MESSAGE Oldentide Admin: " + msg + " <<<";
+        formattedMsg = ">>>MESSAGE Celegraph Admin: " + msg + " <<<";
     }
     else {
         formattedMsg = ">>>MESSAGE Client " + fromUser + ": " + msg + " <<<";

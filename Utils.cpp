@@ -162,7 +162,7 @@ namespace utils {
 
     /*
 
-    Oldentide Packet Header
+    Celegraph Packet Header
     =======================
 
     The following packet header shall be appended to the beginning

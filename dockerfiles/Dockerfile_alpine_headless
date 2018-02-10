@@ -29,4 +29,4 @@ EXPOSE 1337/udp
 
 # TODO: This isn't working, it seems...
 # Spawn a command line interface
-CMD ["/oldentied/bin/Server", "1337"]
+CMD ["/celegraph/bin/server", "1337"]
