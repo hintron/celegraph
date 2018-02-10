@@ -4,7 +4,7 @@ bin
 # Ignore local libraries and headers
 include
 lib
-# *_temp/
+*_temp/
 
 # Ignore 3rd-party library folders
 msgpack

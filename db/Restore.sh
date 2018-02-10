@@ -1,40 +1,17 @@
-#!/bin/bash
-# Filename:    Restore.sh
-# Author:      Joseph DeVictoria
-# Date:        March_30_2017
-# Purpose:     Simple script to restore database from csv files.
-
 echo "Restoring database now..."
 
-sqlite3 Oldentide.db <<EOF
+sqlite3 celegraph.db <<EOF
 .headers on
 .mode csv
-.import accounts.bac accounts
+.import account.csv account
 .quit
 EOF
-echo "Accounts Restored."
+echo "Account table restored."
 
-sqlite3 Oldentide.db <<EOF
+sqlite3 celegraph.db <<EOF
 .headers on
 .mode csv
-.import players.bac players
+.import user.csv user
 .quit
 EOF
-echo "Players Restored."
-
-sqlite3 Oldentide.db <<EOF
-.headers on
-.mode csv
-.import npcs.bac npcs
-.quit
-EOF
-echo "NPCs Restored."
-
-sqlite3 Oldentide.db <<EOF
-.headers on
-.mode csv
-.import items.bac items
-.quit
-EOF
-echo "Items Restored."
-
+echo "User table restored."

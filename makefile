@@ -2,12 +2,8 @@ BIN = mkdir database server client unittest
 
 # Set the compiler
 # COMPILER = g++
-# COMPILER = clang++
-COMPILER = em++
-
-# If you don't have sudo access, you can put your local lib and header files here!
-LOCAL_LIBS = lib_local
-LOCAL_HEADERS = include_local
+COMPILER = clang++
+# COMPILER = em++
 
 # Keep 3rd party files local, to simplify life (no sudo or messing with os files)
 MSGPACK_HEADER = -I msgpack
@@ -30,13 +26,8 @@ all : $(BIN)
 mkdir :
 	mkdir -p bin db
 
-
 database db : mkdir
-	sqlite3 db/Oldentide.db < db/InitializeDb.sql; \
-	bash db/InitializeNpcs.sh
-
-npc npcs : mkdir
-	bash db/InitializeNpcs.sh
+	sqlite3 db/celegraph.db < db/init_db.sql
 
 # NOTE: With gcc/g++, dependent libraries need to be specified BEFORE the library it depends on
 server : mkdir msgpack sqlitecpp
@@ -120,10 +111,7 @@ sqlitecpp :
 # and be sure to also add -DSQLITE_USE_LEGACY_STRUCT to the g++ DEFS make variable above, or you'll get some errors in the headers
 
 
-
-
-
-.PHONY: all, clean, cleanall, cleansql, mkdir, database, db, npc, npcs, server, client, unittest, msgpack, catch, sqlitecpp
+.PHONY: all, clean, cleanall, cleansql, mkdir, database, db, server, client, unittest, msgpack, catch, sqlitecpp
 
 
 
