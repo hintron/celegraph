@@ -1,6 +1,6 @@
 Celegraph
 ==
-*Celegraph* is an open-source internet messaging library, written in [C++][1].
+*Celegraph* is an open-source internet messaging library, written in [C++11][1].
 
 Celegraph was derived from a messaging system developed in [*Oldentide*][2], an open-source multiplayer online role-playing game. Be sure to check it out!
 

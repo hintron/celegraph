@@ -63,7 +63,8 @@ void Server::Run() {
         // Funky syntax; server object needs to be second param
         // See http://stackoverflow.com/questions/10673585/start-thread-with-member-function
         std::thread t(&Server::WorkerThread, this, i);
-        t.detach(); // Detach the threads so we don't need to join them manually
+        // Detach the threads so we don't need to join them manually
+        t.detach();
     }
 
     // // Set up a statistics thread, to monitor the server
@@ -94,18 +95,30 @@ void Server::WorkerThread(int id) {
     while(1){
         packets::packet_t packet;
 
-        // The following 2 lines will lock, release lock, and block thread
-        // until notify_one() is called after a packet arrives
-        // http://en.cppreference.com/w/cpp/thread/condition_variable/wait
+        // Creates a unique_lock wrapper around the mutex and locks the mutex
         std::unique_lock<std::mutex> ul(packetQueueMutex);
+        // Atomically releases mutex lock, blocks this thread, and waits until
+        // notify_one() is called from main thread (after a packet arrives)
         packetQueueSyncVar.wait(ul);
-        // std::cout << "Worker thread " << id << " handling the request!" << std::endl;
-        // Retrieve a packet from the queue
-        // create a copy of the packet
+        // Now that notify_one() has been called, wait relocks the mutex
+
+        // Retrieve a packet from the queue by creating a copy
         packet = packetQueue.front();
         packetQueue.pop();
+        // Give back the packet queue to any thread that needs it
         packetQueueMutex.unlock();
 
+        // Now we are free to work on our copy of the packet!
+
+        // See:
+        // http://en.cppreference.com/w/cpp/thread/condition_variable/wait
+        // http://en.cppreference.com/w/cpp/thread/unique_lock/unique_lock
+        // NOTE: a unique_lock wrapper around packetQueueMutex is necessary
+        // in order to use the condition variable mechanisms
+
+
+
+        // std::cout << "Worker thread " << id << " handling the request!" << std::endl;
         msgpack::object_handle deserialized_data;
         uint8_t packetType;
         deserialized_data = utils::GetDataFromPacket(packet.data, &packetType);
