@@ -64,13 +64,79 @@ Inside the container, run:
     ./bin/server 1337
 
 
+
+
+
+How Celegraph works - high level:
+------------
+Currently, there is a single central server that manages everything. All messages between clients are routed through this server.
+
+The server creates a pool of worker threads that each can process a single packet at a time. The main thread listens for packets and forwards those packets to the worker threads via a single packet queue.
+
+
+How Celegraph works - more details:
+------------
+When the server is first starts, the main thread spawns an admin shell thread:
+
+main
+|       admin shell
+|-------^
+|       |
+
+This shell provides the administrator CLI access to the server itself during operation.
+
+Once the admin shell thread has been created, the main thread will then create worker threads (currently, it creates 4):
+
+main
+|       admin shell
+|-------^
+|       |
+|       |     wrk1    wrk2    wrk3    wrk4
+|---------------^-------^-------^-------^
+|       |       |       |       |       |
+|       |       |       |       |       |
+
+The main thread then listens for UDP packets coming on the port specified for the socket.
+
+The main thread and the worker threads all share the same packet queue. This packet queue is essentially a message queue that the main thread uses to communicate with the worker threads.
+
+main                           -------------
+|       admin shell     queue: |o|o|o| | | |
+|-------^                      -------------
+|       |
+|       |     wrk1    wrk2    wrk3    wrk4
+|---------------^-------^-------^-------^
+|       |       |       |       |       |
+|       |       |       |       |       |
+
+When a packet comes in, the main thread takes a mutex lock, so that it knows nobody else is touching the packet queue. Then, it copies the received packet into the packet queue, released the lock, and notifies the other threads that there is something in the packet queue. It does this by calling the notify_one() method of something called a std::condition_variable. Then, it loops back to the top to listen for packets again.
+
+The worker threads also try to take the mutex lock. But it does this by wrapping it in something special called a std::unique_lock. Creating a unique_lock with the mutex automatically takes out a lock on the mutex it wraps.
+
+Then, the worker thread will wait on the condition_variable shared with main via the method wait(). wait() will release the mutex wrapped by unique_lock, put the worker thread to sleep, and wait until the main thread wakes it up via the notify_one() command.
+
+When the worker thread wakes, it automatically retakes the mutex and has the green light to pull a packet out of the packet queue. Once the worker thread creates a local copy of the packet to work with, it releases the lock, and the packet queue is free to be used. If multiple threads are waiting, only one of them will get woken up by the notify_one() command.
+
+
+
+
 Project TODO:
 ------------
+-Rethink the architecture. Instead of having one single server, what if we make it decentralized/peer-to-peer? What if we make each client capable of being a server?
+
+-Rethink how to do the packets. Maybe reduce packet types? Make it generic?
+
+-Try out my ideas on "levels of abstraction" - Have multiple layers of use of the library
+
+-Create hooks or something into JavsScript/NodeJs?
+
 -Make the client select user to talk to once, instead of each time
 
 -Create a src directory, and separate it from test code
 
 -Use one of the other C message pack implementations that are lighter and faster. This will help reduce compile times.
+
+-Test to make sure that things still work, even if worker threads are created AFTER some packets get put into the queue (does notify_one() have some kind of count, so future wait() calls that aren't already waiting will work? How large is this count?)
 
 -Make sure that packet and user input can't overflow space for strings, to prevent against buffer overflow exploits.
 
