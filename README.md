@@ -77,16 +77,16 @@ The server creates a pool of worker threads that each can process a single packe
 How Celegraph works - more details:
 ------------
 When the server is first starts, the main thread spawns an admin shell thread:
-
+```
 main
 |       admin shell
 |-------^
 |       |
-
+```
 This shell provides the administrator CLI access to the server itself during operation.
 
 Once the admin shell thread has been created, the main thread will then create worker threads (currently, it creates 4):
-
+```
 main
 |       admin shell
 |-------^
@@ -95,11 +95,11 @@ main
 |---------------^-------^-------^-------^
 |       |       |       |       |       |
 |       |       |       |       |       |
-
+```
 The main thread then listens for UDP packets coming on the port specified for the socket.
 
 The main thread and the worker threads all share the same packet queue. This packet queue is essentially a message queue that the main thread uses to communicate with the worker threads.
-
+```
 main                           -------------
 |       admin shell     queue: |o|o|o| | | |
 |-------^                      -------------
@@ -108,7 +108,7 @@ main                           -------------
 |---------------^-------^-------^-------^
 |       |       |       |       |       |
 |       |       |       |       |       |
-
+```
 When a packet comes in, the main thread takes a mutex lock, so that it knows nobody else is touching the packet queue. Then, it copies the received packet into the packet queue, released the lock, and notifies the other threads that there is something in the packet queue. It does this by calling the notify_one() method of something called a std::condition_variable. Then, it loops back to the top to listen for packets again.
 
 The worker threads also try to take the mutex lock. But it does this by wrapping it in something special called a std::unique_lock. Creating a unique_lock with the mutex automatically takes out a lock on the mutex it wraps.
