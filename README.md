@@ -76,14 +76,14 @@ The server creates a pool of worker threads that each can process a single packe
 
 How Celegraph works - more details:
 ------------
-When the server is first starts (see `Server::Run()` in Server.cpp), the main thread spawns an admin shell thread:
+When the server first starts (see `Server::Run()` in Server.cpp), the main thread spawns an admin shell thread:
 ```
 main
 |       admin shell
 |-------^
 |       |
 ```
-This shell provides the administrator CLI access to the server itself during operation (see AdminShell.cpp).
+This shell provides administrative CLI access to the server itself during operation (see AdminShell.cpp). It just loops, waiting for input from the command line.
 
 Once the admin shell thread has been created, the main thread (i.e. `Server::Run()`) will then create worker threads (see `Server::WorkerThread()` in Server.cpp):
 ```
