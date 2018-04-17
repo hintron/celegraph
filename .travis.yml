@@ -1,0 +1,9 @@
+# Celegraph Travis CI Script
+
+# See https://docs.travis-ci.com/user/getting-started/
+# See https://docs.travis-ci.com/user/languages/cpp/
+language: cpp
+script: make
+compiler:
+  - clang
+  - gcc

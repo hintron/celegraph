@@ -1,9 +1,12 @@
 BIN = mkdir database server client test
 
-# Set the compiler
-COMPILER = g++
-# COMPILER = clang++
-# COMPILER = em++
+# Set the compiler using the CXX implicit make variable
+# Default is g++
+# See https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
+# CXXFLAGS is the implicit variable for flags passed to CXX
+# How to pass in make arguments:
+# 	make CXX=clang++
+# See https://stackoverflow.com/questions/2969222/make-gnu-make-use-a-different-compiler
 
 # Locally install 3rd party files, to simplify life (no sudo or messing with os files or os package managers)
 MSGPACK_HEADER = -I msgpack
@@ -31,13 +34,13 @@ database db : mkdir
 
 # NOTE: With gcc/g++, dependent libraries need to be specified BEFORE the library it depends on
 server : mkdir msgpack sqlitecpp
-	$(COMPILER) -g $(SERVER_FILES) -std=c++11 $(MSGPACK_HEADER) $(SQLITE_HEADERS) $(SQLITE_LIBS) -lSQLiteCpp -lsqlite3 -ldl -lpthread -o bin/server $(DEFS)
+	$(CXX) -g $(SERVER_FILES) -std=c++11 $(MSGPACK_HEADER) $(SQLITE_HEADERS) $(SQLITE_LIBS) -lSQLiteCpp -lsqlite3 -ldl -lpthread -o bin/server $(DEFS) $(CXXFLAGS)
 
 client : mkdir msgpack
-	$(COMPILER) -g $(CLIENT_FILES) -std=c++11 $(MSGPACK_HEADER) -lpthread -o bin/client
+	$(CXX) -g $(CLIENT_FILES) -std=c++11 $(MSGPACK_HEADER) -lpthread -o bin/client $(CXXFLAGS)
 
 test : mkdir msgpack catch sqlitecpp
-	$(COMPILER) -g $(UNITTEST_FILES) -std=c++11 $(CATCH_HEADER) $(MSGPACK_HEADER) $(SQLITE_HEADERS) $(SQLITE_LIBS) -lSQLiteCpp -lsqlite3 -ldl -lpthread -o bin/test $(DEFS)
+	$(CXX) -g $(UNITTEST_FILES) -std=c++11 $(CATCH_HEADER) $(MSGPACK_HEADER) $(SQLITE_HEADERS) $(SQLITE_LIBS) -lSQLiteCpp -lsqlite3 -ldl -lpthread -o bin/test $(DEFS) $(CXXFLAGS)
 
 clean :
 	rm -f bin/server bin/client bin/test;
