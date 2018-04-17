@@ -1,10 +1,7 @@
-msgpack/
-sqlitecpp/
-include_local/
-lib_local/
 # Ignore some folders
 bin/
+lib/
 dockerfiles/
 doc/
-# Ignore any .db files
+# Ignore the current db
 *.db
