@@ -6,6 +6,7 @@ Celegraph was derived from a messaging system developed in [*Oldentide*][2], an 
 
 Celegraph aims to provide an easy-to-use and fast messaging library over UDP.
 
+[![Build Status](https://travis-ci.org/hintron/celegraph.svg?branch=master)](https://travis-ci.org/hintron/celegraph)
 
 Requirements
 ------------

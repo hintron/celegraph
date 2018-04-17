@@ -14,7 +14,6 @@ CATCH_HEADER = -I catch
 SQLITE_HEADERS = -I sqlitecpp
 SQLITE_LIBS = -L sqlitecpp
 
-
 SERVER_FILES = 		Main.cpp AdminShell.cpp User.cpp ServerState.cpp Server.cpp SQLConnector.cpp Utils.cpp
 CLIENT_FILES = 		Client.cpp Utils.cpp
 UNITTEST_FILES = 	UnitTest.cpp AdminShell.cpp ServerState.cpp Server.cpp User.cpp SQLConnector.cpp Utils.cpp
