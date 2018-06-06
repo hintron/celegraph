@@ -4,14 +4,14 @@ author: Hintron
 authorURL: https://github.com/hintron
 ---
 
-I was looking for a nice way to setup documentation, and [Docusaurus](https://docusaurus.io/) might be the answer!
+I was looking for a nice way to set up documentation, and [Docusaurus](https://docusaurus.io/) might be the answer!
 
  <!--truncate-->
 
 ## Evaluating Docusaurus
 
 Things I want to try to figure out:
-* Is there a way to automatically document my code using something like JavaDoc, so documentation is coupled with the code?\
+* Is there a way to automatically document my code using something like JavaDoc, so documentation is coupled with the code?
 * How does it work with gh-pages - I have my source in master, and then the website build on gh-pages?
 * How do I modify the CSS?
 
