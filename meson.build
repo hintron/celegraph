@@ -17,13 +17,14 @@ compiler = meson.get_compiler('cpp')
 #     make msgpack
 #     make sqlitecpp
 #     make catch
-catch_inc = include_directories('lib/catch')
+# catch_inc = include_directories('lib/catch')
 sqlitecpp_inc = include_directories('lib/sqlitecpp')
 msgpack_inc = include_directories('lib/msgpack')
+doctest_inc = include_directories('lib/doctest')
 
 server_include_dirs = [msgpack_inc, sqlitecpp_inc]
 client_include_dirs = [msgpack_inc]
-test_include_dirs = [msgpack_inc, sqlitecpp_inc, catch_inc]
+test_include_dirs = [msgpack_inc, sqlitecpp_inc, doctest_inc]
 
 sqlitecpp_lib = compiler.find_library('sqlitecpp', dirs: ['/mnt/c/Users/micro/me/code/celegraph/lib/sqlitecpp'])
 # Note: sqlitecpp comes with libsqlite3.a. Link on that

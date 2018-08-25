@@ -1,9 +1,11 @@
 // A unit testing platform to verify functions.
 
-// Load the testing framework (do it ABOVE the catch include!)
-#define CATCH_CONFIG_MAIN   // This tells Catch to provide a main() - only do this in one cpp file
+// Load the testing framework (do it ABOVE the include!)
+// Tell Doctest to provide a main function
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include <doctest.h>
 
-#include <catch.hpp>
+
 #include "AdminShell.h"
 #include "ServerState.h"
 #include "User.h"
@@ -12,7 +14,7 @@
 #include "SQLConnector.h"
 #include "Utils.h"
 
-TEST_CASE( "create server", "[server]" ) {
+TEST_CASE("create server") {
     Server * server = new Server(7331);
     delete server;
 }
@@ -50,16 +52,16 @@ std::vector<std::string> accounts_to_insert {
 
 
 // TODO: Be careful! Right now, this will overwrite the current database!
-TEST_CASE( "init db", "[sql]" ) {
+TEST_CASE("init db") {
     SQLConnector* sql = new SQLConnector();
     // Init the db
-    REQUIRE( sql->ExecuteSqlFile("db/init_db.sql") == true );
+    CHECK(sql->ExecuteSqlFile("db/init_db.sql") == true );
 
     delete sql;
 }
 
 
-TEST_CASE( "insert account", "[sql]" ) {
+TEST_CASE("insert account") {
     SQLConnector* sql = new SQLConnector();
     std::string email("my_email@my.example.com");
     std::string key("deadBEEF019");
@@ -67,23 +69,23 @@ TEST_CASE( "insert account", "[sql]" ) {
 
     // Insert the accounts
     for (int i = 0; i < accounts_to_insert.size(); ++i) {
-        REQUIRE(sql->InsertAccount(accounts_to_insert[i],email,key,salt) != 0);
+        CHECK(sql->InsertAccount(accounts_to_insert[i],email,key,salt) != 0);
     }
 
     // Make sure reinserting accounts with the same name fails
     for (int i = 0; i < accounts_to_insert.size(); ++i) {
-        REQUIRE(sql->InsertAccount(accounts_to_insert[i],email,key,salt) == 0);
+        CHECK(sql->InsertAccount(accounts_to_insert[i],email,key,salt) == 0);
     }
 
     std::vector<std::string> accounts = sql->GetAccounts();
     // Make sure all the accounts were inserted
-    REQUIRE( accounts.size() == accounts_to_insert.size());
+    CHECK( accounts.size() == accounts_to_insert.size());
 
     delete sql;
 }
 
 
-TEST_CASE( "insert user", "[sql]" ) {
+TEST_CASE("insert user") {
     SQLConnector* sql = new SQLConnector();
     sockaddr_in dummyClient;
 
@@ -97,10 +99,10 @@ TEST_CASE( "insert user", "[sql]" ) {
     );
 
     int account_id = 1;
-    REQUIRE( sql->InsertUser(tony, account_id) != 0 );
+    CHECK( sql->InsertUser(tony, account_id) != 0 );
     // Test to make sure users looks good
     std::vector<std::string> users = sql->GetUserList(accounts_to_insert[0]);
-    REQUIRE( users.size() > 0 );
+    CHECK( users.size() > 0 );
     delete sql;
 }
 
@@ -111,28 +113,28 @@ TEST_CASE( "insert user", "[sql]" ) {
 ///////////////////////////
 
 
-TEST_CASE( "Tokenfy", "[utils]" ) {
+TEST_CASE("Tokenfy") {
     std::vector<std::string> temp = utils::Tokenfy(std::string("This is a string"),' ');
-    REQUIRE( temp.size() == 4 );
-    REQUIRE( temp[0].compare("This") == 0 );
-    REQUIRE( temp[3].compare("string") == 0 );
+    CHECK( temp.size() == 4 );
+    CHECK( temp[0].compare("This") == 0 );
+    CHECK( temp[3].compare("string") == 0 );
 
     temp = utils::Tokenfy(std::string(" abc.def.ghi "),'.');
-    REQUIRE( temp.size() == 3 );
-    REQUIRE( temp[0].compare(" abc") == 0 );
-    REQUIRE( temp[2].compare("ghi ") == 0 );
+    CHECK( temp.size() == 3 );
+    CHECK( temp[0].compare(" abc") == 0 );
+    CHECK( temp[2].compare("ghi ") == 0 );
 
     temp = utils::Tokenfy(std::string("....."),'.');
-    REQUIRE( temp.size() == 6 );
-    REQUIRE( temp[0].compare("") == 0 );
-    REQUIRE( temp[5].compare("") == 0 );
+    CHECK( temp.size() == 6 );
+    CHECK( temp[0].compare("") == 0 );
+    CHECK( temp[5].compare("") == 0 );
 
     temp = utils::Tokenfy(std::string(""),'.');
-    REQUIRE( temp.size() == 1 );
-    REQUIRE( temp[0].compare("") == 0 );
+    CHECK( temp.size() == 1 );
+    CHECK( temp[0].compare("") == 0 );
 
     temp = utils::Tokenfy(std::string("askdjf kjhaskld fklj askljfh ljh"),'.');
-    REQUIRE( temp.size() == 1 );
+    CHECK( temp.size() == 1 );
 }
 
 
@@ -144,40 +146,40 @@ TEST_CASE( "Tokenfy", "[utils]" ) {
 
 
 
-TEST_CASE( "SanitizeAccountName", "[utils]" ) {
-    REQUIRE( utils::SanitizeAccountName("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") == false );
-    REQUIRE( utils::SanitizeAccountName("!@#$%!@%@!^#$%@#$") == false );
-    REQUIRE( utils::SanitizeAccountName("; drop all tables") == false );
-    REQUIRE( utils::SanitizeAccountName("A") == false );
-    REQUIRE( utils::SanitizeAccountName("") == false );
-    REQUIRE( utils::SanitizeAccountName("        ") == false );
-    REQUIRE( utils::SanitizeAccountName("my_ACCOUNT_1234   ") == false );
+TEST_CASE("SanitizeAccountName") {
+    CHECK( utils::SanitizeAccountName("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") == false );
+    CHECK( utils::SanitizeAccountName("!@#$%!@%@!^#$%@#$") == false );
+    CHECK( utils::SanitizeAccountName("; drop all tables") == false );
+    CHECK( utils::SanitizeAccountName("A") == false );
+    CHECK( utils::SanitizeAccountName("") == false );
+    CHECK( utils::SanitizeAccountName("        ") == false );
+    CHECK( utils::SanitizeAccountName("my_ACCOUNT_1234   ") == false );
 
-    REQUIRE( utils::SanitizeAccountName("my_ACCOUNT_1234") == true );
+    CHECK( utils::SanitizeAccountName("my_ACCOUNT_1234") == true );
 
 
 }
 
-TEST_CASE( "CheckAccountNameLength", "[utils]" ) {
-    REQUIRE( utils::CheckAccountNameLength("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") == false );
-    REQUIRE( utils::CheckAccountNameLength("A") == false );
-    REQUIRE( utils::CheckAccountNameLength("") == false );
+TEST_CASE("CheckAccountNameLength") {
+    CHECK( utils::CheckAccountNameLength("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") == false );
+    CHECK( utils::CheckAccountNameLength("A") == false );
+    CHECK( utils::CheckAccountNameLength("") == false );
 
-    REQUIRE( utils::CheckAccountNameLength("my_ACCOUNT_1234") == true );
+    CHECK( utils::CheckAccountNameLength("my_ACCOUNT_1234") == true );
 }
 
 
-TEST_CASE( "SanitizeAlphanumeric", "[utils]" ) {
-    REQUIRE( utils::SanitizeAlphanumeric("*&!@^*&#@@#$") == false );
-    REQUIRE( utils::SanitizeAlphanumeric(";;;;;") == false );
-    REQUIRE( utils::SanitizeAlphanumeric("||||") == false );
-    REQUIRE( utils::SanitizeAlphanumeric("----") == false );
-    REQUIRE( utils::SanitizeAlphanumeric("        ") == false );
-    REQUIRE( utils::SanitizeAlphanumeric("my_ACCOUNT_1234   ") == false );
-    REQUIRE( utils::SanitizeAlphanumeric("####") == false );
+TEST_CASE("SanitizeAlphanumeric") {
+    CHECK( utils::SanitizeAlphanumeric("*&!@^*&#@@#$") == false );
+    CHECK( utils::SanitizeAlphanumeric(";;;;;") == false );
+    CHECK( utils::SanitizeAlphanumeric("||||") == false );
+    CHECK( utils::SanitizeAlphanumeric("----") == false );
+    CHECK( utils::SanitizeAlphanumeric("        ") == false );
+    CHECK( utils::SanitizeAlphanumeric("my_ACCOUNT_1234   ") == false );
+    CHECK( utils::SanitizeAlphanumeric("####") == false );
 
-    REQUIRE( utils::SanitizeAlphanumeric("____") == true );
-    REQUIRE( utils::SanitizeAlphanumeric("my_ACCOUNT_1234") == true );
+    CHECK( utils::SanitizeAlphanumeric("____") == true );
+    CHECK( utils::SanitizeAlphanumeric("my_ACCOUNT_1234") == true );
 }
 
 

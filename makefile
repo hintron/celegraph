@@ -50,7 +50,7 @@ cleanall : clean
 # Download msgpack-c and set it to v2.1.1 if needed
 # Delete the rest of the files and only keep the headers (c++ version is a header-only library)
 msgpack : mkdir
-	@if [ ! -d "msgpack" ]; \
+	@if [ ! -d "lib/msgpack" ]; \
 	then \
 		echo "Downloading Message Pack..."; \
 		cd lib; \
@@ -67,7 +67,7 @@ msgpack : mkdir
 
 # Download the Catch testing framework
 catch : mkdir
-	@if [ ! -d "catch" ]; \
+	@if [ ! -d "lib/catch" ]; \
 	then \
 		echo "Downloading Catch test framework..."; \
 		cd lib; \
@@ -81,9 +81,27 @@ catch : mkdir
 		cd ..; \
 	fi
 
+
+# Download the Doctest testing framework
+doctest : mkdir
+	@if [ ! -d "lib/doctest" ]; \
+	then \
+		echo "Downloading Doctest test framework..."; \
+		cd lib; \
+		git clone https://github.com/onqtam/doctest doctest_temp; \
+		cd doctest_temp; \
+		echo "Setting doctest to v2.0.0"; \
+		git checkout 2.0.0 -q; \
+		cd ..; \
+		mv doctest_temp/doctest doctest; \
+		rm -rf doctest_temp; \
+		cd ..; \
+	fi
+
+
 # Download the SQLiteCpp and sqlite3 libraries and headers
 sqlitecpp : mkdir
-	@if [ ! -d "sqlitecpp" ]; \
+	@if [ ! -d "lib/sqlitecpp" ]; \
 	then \
 		echo "Downloading SQLiteCpp test framework..."; \
 		cd lib; \

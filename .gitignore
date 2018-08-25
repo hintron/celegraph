@@ -1,15 +1,11 @@
 # Ignore executables
 bin/
+build/
 
 # Ignore local libraries and headers
 include
 lib
 *_temp/
-
-# Ignore 3rd-party library folders
-msgpack
-catch
-sqlitecpp
 
 
 # Docusaurus
