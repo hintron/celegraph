@@ -3,8 +3,29 @@
 # See https://docs.travis-ci.com/user/getting-started/
 # See https://docs.travis-ci.com/user/languages/cpp/
 # See https://docs.travis-ci.com/user/reference/overview/
-language: cpp
-script: make && bin/test
-compiler:
-  - clang     # clang++
-  - gcc       # g++
+# language: cpp
+# script: make && bin/test
+# compiler:
+#   - clang     # clang++
+#   - gcc       # g++
+
+# For Travis CI with Meson, see http://mesonbuild.com/Continuous-Integration.html#continuous-integration
+sudo: false
+
+os:
+  - linux
+
+language:
+  - cpp
+
+services:
+  - docker
+
+before_install:
+  - docker pull ubuntu:bionic
+
+script:
+  - echo FROM ubuntu:bionic > Dockerfile
+  - echo ADD . /root >> Dockerfile
+  - docker build -t withgit .
+  - docker run withgit /bin/sh -c "cd /root && TRAVIS=true CC=$CC CXX=$CXX meson builddir && ninja -C builddir test"
