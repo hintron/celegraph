@@ -6,18 +6,21 @@ Celegraph
 
 Celegraph was derived from a messaging system developed in [*Oldentide*][2], an in-development open-source massive multiplayer online role-playing game. Be sure to check it out!
 
-Configuring, building, and installing with Meson
-------------
 
-Build dependencies:
 
-    make sqlitecpp
-    make msgpack
-    make catch
+Quickstart
+--------------
+
+Install build tools:
+
+    sudo apt install build-essential meson cmake
+
+Build 3rd-party dependencies:
+
+    make deps
 
 Build:
 
-    mkdir build
     meson build
     cd build
     ninja
@@ -26,23 +29,17 @@ Install:
 
     sudo ninja install
 
-Uninstall:
-
-    sudo ninja uninstall
-
-
-Server and Test Client Usage
-------------
+Run Server:
 
     celegraph-server <port>
 
-where <port> is the port the server is using.
-
-To test that the server is running, in a separate terminal, run
+Run Client:
 
     celegraph-client <addr> <port>
 
-Where <addr> is the address of the server and <port> is the port of the server.
+Uninstall:
+
+    sudo ninja uninstall
 
 
 [1]: http://www.cppreference.com/ "C / C++ reference"

@@ -1,5 +1,6 @@
 [requires]
 msgpack/2.1.5@bincrafters/stable
 Catch/1.12.1@bincrafters/stable
+doctest/1.2.6@bincrafters/stable
 [generators]
-txt
+gcc

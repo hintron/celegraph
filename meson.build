@@ -13,22 +13,20 @@ add_project_arguments('-DSQLITE_ENABLE_COLUMN_METADATA', language : 'cpp')
 compiler = meson.get_compiler('cpp')
 
 # Custom installed libraries
-# For now, download and build them using the Makefile:
-#     make msgpack
-#     make sqlitecpp
-#     make catch
+# For now, first download and build them using the Makefile:
+#     make deps
 # catch_inc = include_directories('lib/catch')
-sqlitecpp_inc = include_directories('lib/sqlitecpp')
-msgpack_inc = include_directories('lib/msgpack')
-doctest_inc = include_directories('lib/doctest')
+sqlitecpp_inc = include_directories(join_paths('lib','sqlitecpp'))
+msgpack_inc = include_directories(join_paths('lib','msgpack'))
+doctest_inc = include_directories(join_paths('lib','doctest'))
 
 server_include_dirs = [msgpack_inc, sqlitecpp_inc]
 client_include_dirs = [msgpack_inc]
 test_include_dirs = [msgpack_inc, sqlitecpp_inc, doctest_inc]
 
-sqlitecpp_lib = compiler.find_library('sqlitecpp', dirs: ['/mnt/c/Users/micro/me/code/celegraph/lib/sqlitecpp'])
+sqlitecpp_lib = compiler.find_library('SQLiteCpp', dirs: [join_paths(meson.current_source_dir(), 'lib', 'sqlitecpp')])
 # Note: sqlitecpp comes with libsqlite3.a. Link on that
-sqlite3_lib = compiler.find_library('sqlite3', dirs: ['/mnt/c/Users/micro/me/code/celegraph/lib/sqlitecpp'])
+sqlite3_lib = compiler.find_library('sqlite3', dirs: [join_paths(meson.current_source_dir(), 'lib', 'sqlitecpp')])
 pthread_lib = compiler.find_library('pthread')
 dl_lib = compiler.find_library('dl')
 

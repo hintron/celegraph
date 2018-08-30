@@ -48,7 +48,11 @@ clean :
 cleanall : clean
 	rm -rf lib;
 
-download: msgpack catch doctest
+cleandeps :
+	rm -rf lib;
+
+
+deps: msgpack sqlitecpp doctest
 
 # Download msgpack-c and set it to v2.1.1 if needed
 # Delete the rest of the files and only keep the headers (c++ version is a header-only library)
@@ -134,7 +138,7 @@ sqlitecpp : mkdir
 # and be sure to also add -DSQLITE_USE_LEGACY_STRUCT to the g++ DEFS make variable above, or you'll get some errors in the headers
 
 
-.PHONY: all, clean, cleanall, mkdir, database, db, server, client, test, msgpack, catch, sqlitecpp
+.PHONY: all, clean, cleanall, mkdir, database, db, server, client, test, msgpack, catch, sqlitecpp, doctest, cleandeps, deps
 
 
 
