@@ -10,13 +10,17 @@
 #   - gcc       # g++
 
 # For Travis CI with Meson, see http://mesonbuild.com/Continuous-Integration.html#continuous-integration
-sudo: false
+sudo: required
 
 os:
   - linux
 
 language:
   - cpp
+
+compiler:
+  - clang     # clang++
+  - gcc       # g++
 
 services:
   - docker

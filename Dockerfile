@@ -10,7 +10,7 @@
 #   ./bin/client 127.0.0.1 1337
 
 # Base image
-FROM alpine:3.6
+FROM alpine:3.8
 
 # Set the working directory
 WORKDIR /celegraph
@@ -24,15 +24,18 @@ RUN apk --no-cache add \
     bash \
     cmake \
     make\
+    meson \
     g++ \
+    clang \
     git \
     sqlite
 
-RUN ["make"]
+RUN ["make download"]
 
 # Make ports available to the world outside this container
 # UDP ports need to be explicitly specified
 EXPOSE 1337/udp
+EXPOSE 1337/tcp
 
 # Spawn a command line interface
 CMD ["bash"]

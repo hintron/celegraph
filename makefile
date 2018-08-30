@@ -41,11 +41,14 @@ client : mkdir msgpack
 test : mkdir msgpack catch sqlitecpp
 	$(CXX) -g $(UNITTEST_FILES) -std=c++11 $(CATCH_HEADER) $(MSGPACK_HEADER) $(SQLITE_HEADERS) $(SQLITE_LIBS) -lSQLiteCpp -lsqlite3 -ldl -lpthread -o bin/test $(DEFS) $(CXXFLAGS)
 
+
 clean :
 	rm -f bin;
 
 cleanall : clean
 	rm -rf lib;
+
+download: msgpack catch doctest
 
 # Download msgpack-c and set it to v2.1.1 if needed
 # Delete the rest of the files and only keep the headers (c++ version is a header-only library)
