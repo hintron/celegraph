@@ -27,14 +27,12 @@ test_include_dirs = [msgpack_inc, sqlitecpp_inc, doctest_inc]
 sqlitecpp_lib = compiler.find_library('SQLiteCpp', dirs: [join_paths(meson.current_source_dir(), 'lib', 'sqlitecpp')])
 # Note: sqlitecpp comes with libsqlite3.a. Link on that
 sqlite3_lib = compiler.find_library('sqlite3', dirs: [join_paths(meson.current_source_dir(), 'lib', 'sqlitecpp')])
-pthread_lib = compiler.find_library('pthread')
+pthread_lib = dependency('threads')
 dl_lib = compiler.find_library('dl')
 
 server_libs = [sqlitecpp_lib, sqlite3_lib, pthread_lib, dl_lib]
 client_libs = [pthread_lib]
 test_libs = server_libs
 
-
 subdir('src')
-
-# meson.add_install_script(['sqlite3', 'db/celegraph.db', '<', 'db/init_db.sql'])
+subdir('db')

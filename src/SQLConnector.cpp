@@ -12,7 +12,7 @@
 
 // Note: In c++, you can't just instantiate a class inside the constructor - it needs to be in the initialization list
 // This tries to open the database file when instantiated, and set it to write
-SQLConnector::SQLConnector() : db("db/celegraph.db", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE){
+SQLConnector::SQLConnector() : db("/var/lib/celegraph/celegraph.db", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE){
     std::cout << "Celegraph database \"" << db.getFilename() << "\" opened successfully." << std::endl;
 }
 
@@ -227,7 +227,6 @@ bool SQLConnector::GetAccountSalt(char *accountName, char *saltStringHex) {
     if (!utils::SanitizeAccountName(accountName)) {
         return false;
     }
-    char *errorMessage = NULL;
     std::stringstream query;
     query << "select salt from account where accountname = \"" << accountName << "\"";
     // TODO: Get the salt
@@ -291,7 +290,7 @@ int SQLConnector::GetAccountKey(char *accountName, char *keyStringHex) {
 void SQLConnector::ListAccounts() {
     std::vector<std::string> accounts = GetAccounts();
     std::cout << "ACCOUNTS: " << std::endl;
-    for (int i = 0; i < accounts.size(); ++i) {
+    for (unsigned int i = 0; i < accounts.size(); ++i) {
         std::cout << accounts.at(i) << std::endl;
     }
 }

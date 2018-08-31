@@ -11,9 +11,13 @@ Celegraph was derived from a messaging system developed in [*Oldentide*][2], an 
 Quickstart
 --------------
 
-Install build tools:
+Install required packages:
 
-    sudo apt install build-essential meson cmake
+    sudo apt install build-essential ninja-build python3 python3-setuptools sqlite3 cmake
+
+Install the latest version of Meson:
+
+    pip3 install meson
 
 Build 3rd-party dependencies:
 
@@ -31,7 +35,7 @@ Install:
 
 Run Server:
 
-    celegraph-server <port>
+    sudo celegraph-server <port>
 
 Run Client:
 

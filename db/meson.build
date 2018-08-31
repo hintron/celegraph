@@ -1,1 +1,1 @@
-meson.add_install_script(['sqlite3', 'celegraph.db', '<', 'init_db.sql'])
+meson.add_install_script('init_db.sh')
